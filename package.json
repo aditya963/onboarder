@@ -1,0 +1,31 @@
+{
+    "name": "onboarder",
+    "version": "0.1.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "start": "node_modules/nodemon/bin/nodemon.js app.js -x node_modules/babel-cli/bin/babel-node.js --presets es2015 --plugins syntax-async-functions,transform-regenerator",
+        "build": "node_modules/babel-cli/bin/babel.js app.js -d build --presets es2015 --plugins syntax-async-functions,transform-regenerator",
+        "serve": "node build/app.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/aditya963/onboarder.git"
+    },
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/aditya963/onboarder/issues"
+    },
+    "homepage": "https://github.com/aditya963/onboarder#readme",
+    "devDependencies": {
+        "babel-cli": "^6.3.17",
+        "babel-plugin-syntax-async-functions": "^6.3.13",
+        "babel-plugin-transform-regenerator": "^6.3.18",
+        "babel-preset-es2015": "^6.3.13",
+        "nodemon": "^1.8.1"
+    },
+    "dependencies": {
+        "dotenv": "^1.2.0",
+        "slack-client": "^1.5.1"
+    }
+}
