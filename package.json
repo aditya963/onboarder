@@ -4,8 +4,8 @@
     "description": "",
     "main": "app.js",
     "scripts": {
-        "start": "node_modules/nodemon/bin/nodemon.js app.js -x node_modules/babel-cli/bin/babel-node.js --presets es2015 --plugins syntax-async-functions,transform-regenerator",
-        "build": "node_modules/babel-cli/bin/babel.js app.js -d build --presets es2015 --plugins syntax-async-functions,transform-regenerator",
+        "start": "node_modules/nodemon/bin/nodemon.js app/app.js -x node_modules/babel-cli/bin/babel-node.js --presets es2015 --plugins syntax-async-functions,transform-regenerator",
+        "build": "node_modules/babel-cli/bin/babel.js app -d build --presets es2015 --plugins syntax-async-functions,transform-regenerator",
         "serve": "node build/app.js"
     },
     "repository": {
