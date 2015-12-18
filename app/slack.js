@@ -2,7 +2,7 @@ require('dotenv').load();
 import Botkit from 'botkit';
 
 let controller = Botkit.slackbot({
-    debug: true,
+    debug: false,
     json_file_store: '../data/'
 });
 

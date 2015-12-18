@@ -12,6 +12,9 @@ controller.on('rtm_close', function () {
 });
 controller.on('start_treasure_hunt', function (bot, userId) {
     convoManager.start(bot, userId);
+    // controller.storage.users.get(userId, function () {
+    //     console.log(arguments);
+    // });
 });
 controller.hears(['invite treasure hunt (.*)'], 'direct_message', function (bot, message) {
     let matches = message.text.match(/\<\@([A-Z0-9]*)\>/g);
