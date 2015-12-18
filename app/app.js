@@ -1,25 +1,33 @@
 import controller from './slack.js';
+import convoManager from './managers/convoManager.js';
 
-// give the bot something to listen for.
-// controller.hears('hello', 'direct_message,direct_mention,mention', function (bot, message) {
-//     bot.reply(message, 'Hello yourself.');
-// });
-controller.on('rtm_open', function() {
+controller.on('rtm_open', function () {
     console.log('yo its open!');
 });
-controller.on('rtm_close', function() {
+controller.on('rtm_close', function () {
     console.log('its closed :(');
 });
-
-controller.hears(['Hello'], ['direct_message', 'direct_mention', 'mention', 'ambient'], function(bot, message) {
+controller.on('start_treasure_hunt', function (bot, userId) {
+    convoManager.start(bot, userId);
+    // controller.storage.users.get(userId, function () {
+    //     console.log(arguments);
+    // });
+});
+controller.hears(['invite treasure hunt (.*)'], 'direct_message', function (bot, message) {
+    let matches = message.text.match(/\<\@([A-Z0-9]*)\>/g);
+    let userIds = matches.map((match) => match.substr(2, match.length - 3));
+    userIds.forEach((userId) => {
+        controller.trigger('start_treasure_hunt', [bot, userId]);
+    });
+});
+controller.hears(['Hello'], ['direct_message', 'direct_mention', 'mention', 'ambient'], function (bot, message) {
     // start a conversation to handle this response.
-    bot.startConversation(message, function(err, convo) {
+    bot.startConversation(message, function (err, convo) {
 
-        convo.ask('Shall we proceed Say YES, NO or DONE to quit.', [
-        {
+        convo.ask('Shall we proceed Say YES, NO or DONE to quit.', [{
             pattern: bot.utterances.yes,
-            callback: function(response, convo) {
-                controller.storage.users.get(response.user,function (err, user) {
+            callback: function (response, convo) {
+                controller.storage.users.get(response.user, function (err, user) {
                     if (!user) {
                         user = {
                             id: response.user
@@ -37,7 +45,7 @@ controller.hears(['Hello'], ['direct_message', 'direct_mention', 'mention', 'amb
                     } else {
                         user.answers = [reqdData];
                     }
-                    controller.storage.users.save(user, function(err, id) {
+                    controller.storage.users.save(user, function (err, id) {
                         console.log(user);
                         // bot.reply(message, "Got it. I will call you " + user.name + " from now on.");
                     });
@@ -48,9 +56,9 @@ controller.hears(['Hello'], ['direct_message', 'direct_mention', 'mention', 'amb
             }
         }, {
             default: true,
-            callback: function(response, convo) {
+            callback: function (response, convo) {
                 // just repeat the question
-                controller.storage.users.get(response.user,function (err, user) {
+                controller.storage.users.get(response.user, function (err, user) {
                     if (!user) {
                         user = {
                             id: response.user
@@ -68,7 +76,7 @@ controller.hears(['Hello'], ['direct_message', 'direct_mention', 'mention', 'amb
                     } else {
                         user.answers = [reqdData];
                     }
-                    controller.storage.users.save(user, function(err, id) {
+                    controller.storage.users.save(user, function (err, id) {
                         console.log(user);
                         // bot.reply(message, "Got it. I will call you " + user.name + " from now on.");
                     });
@@ -78,11 +86,10 @@ controller.hears(['Hello'], ['direct_message', 'direct_mention', 'mention', 'amb
                 convo.next();
             }
         }]);
-        convo.ask('Not done yet?', [
-        {
+        convo.ask('Not done yet?', [{
             pattern: bot.utterances.yes,
-            callback: function(response, convo) {
-                controller.storage.users.get(response.user,function (err, user) {
+            callback: function (response, convo) {
+                controller.storage.users.get(response.user, function (err, user) {
                     if (!user) {
                         user = {
                             id: response.user
@@ -100,7 +107,7 @@ controller.hears(['Hello'], ['direct_message', 'direct_mention', 'mention', 'amb
                     } else {
                         user.answers = [reqdData];
                     }
-                    controller.storage.users.save(user, function(err, id) {
+                    controller.storage.users.save(user, function (err, id) {
                         console.log(user);
                         // bot.reply(message, "Got it. I will call you " + user.name + " from now on.");
                     });
@@ -110,9 +117,9 @@ controller.hears(['Hello'], ['direct_message', 'direct_mention', 'mention', 'amb
             }
         }, {
             default: true,
-            callback: function(response, convo) {
+            callback: function (response, convo) {
                 // just repeat the question
-                controller.storage.users.get(response.user,function (err, user) {
+                controller.storage.users.get(response.user, function (err, user) {
                     if (!user) {
                         user = {
                             id: response.user
@@ -130,7 +137,7 @@ controller.hears(['Hello'], ['direct_message', 'direct_mention', 'mention', 'amb
                     } else {
                         user.answers = [reqdData];
                     }
-                    controller.storage.users.save(user, function(err, id) {
+                    controller.storage.users.save(user, function (err, id) {
                         console.log(user);
                         // bot.reply(message, "Got it. I will call you " + user.name + " from now on.");
                     });
