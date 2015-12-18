@@ -4,8 +4,9 @@ import fs from 'fs';
 
 async function ask(bot, convo, question) {
     return new Promise(function (resolve, reject) {
+        let regexedAnswer = '^('+question.answers.join('|')+')';
         convo.ask(question.question, [{
-            pattern: bot.utterances.yes,
+            pattern: new RegExp(regexedAnswer,'i'),
             callback: async function (response, convo) {
                 let user;
                 try {
@@ -20,6 +21,8 @@ async function ask(bot, convo, question) {
                 } catch (e) {
                     console.log('failed to fetch', e);
                     convo.say('something broke at our end :(!');
+                        reject(e);
+                        return;
                 }
                 var reqdData = {
                     "message_type": "answer",
@@ -28,16 +31,20 @@ async function ask(bot, convo, question) {
                     "message": response.text,
                     "ts": response.ts,
                 }
+                console.log("inside")
+                console.log(reqdData);
                 user.answers.push(reqdData);
-                console.log(user);
+                // console.log(user);
                 try {
-                    user = await user.save();
+                    await user.save();
                     convo.say('OK you are done!');
                     convo.next();
                     console.log('yo done!');
+                    resolve();
                 } catch (e) {
                     console.log('failed saving', e);
                     convo.say('something broke at our end :(!');
+                    reject(e);
                 }
             }
         }, {
@@ -63,7 +70,8 @@ async function ask(bot, convo, question) {
                         user.answers = [reqdData];
                     }
                     controller.storage.users.save(user, function (err, id) {
-                        console.log(user);
+                        console.log('inside default');
+                        console.log(question.answers);
                         // bot.reply(message, "Got it. I will call you " + user.name + " from now on.");
                     });
                     convo.say('OK I quit');
@@ -77,11 +85,13 @@ async function ask(bot, convo, question) {
 export default {
     start(bot, message) {
         bot.startConversation(message, async function (err, convo) {
+            
             console.log(__dirname + '/../../questions.json');
             let questionsText = fs.readFileSync(__dirname + '/../../questions.json');
             let questions = JSON.parse(questionsText);
             for (let question of questions) {
                 try {
+                    console.log(question.answers.map(answer => new RegExp(answer,'i')));
                     await ask(bot, convo, question);
                 } catch (e) {
 
