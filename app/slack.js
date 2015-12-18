@@ -2,8 +2,7 @@ require('dotenv').load();
 import Botkit from 'botkit';
 
 let controller = Botkit.slackbot({
-    debug: false,
-    json_file_store: '../data/'
+    debug: false
 });
 
 // connect the bot to a stream of messages
