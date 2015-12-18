@@ -37,7 +37,6 @@ async function ask(bot, convo, question) {
                 // console.log(user);
                 try {
                     await user.save();
-                    convo.say('OK you are done!');
                     convo.next();
                     console.log('yo done!');
                     resolve();
@@ -71,10 +70,9 @@ async function ask(bot, convo, question) {
                     }
                     controller.storage.users.save(user, function (err, id) {
                         console.log('inside default');
-                        console.log(question.answers);
-                        // bot.reply(message, "Got it. I will call you " + user.name + " from now on.");
+                        convo.say("try again");
                     });
-                    convo.say('OK I quit');
+            
                 });
                 convo.repeat();
                 convo.next();
