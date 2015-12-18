@@ -1,5 +1,6 @@
 import controller from './slack.js';
 import convoManager from './managers/convoManager.js';
+import db from './db.js';
 
 controller.on('rtm_open', function () {
     console.log('yo its open!');

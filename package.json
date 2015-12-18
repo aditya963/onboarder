@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "botkit": "0.0.4",
-    "dotenv": "^1.2.0"
+    "dotenv": "^1.2.0",
+    "mongoose": "^4.3.2"
   }
 }
