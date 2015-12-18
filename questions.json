@@ -1,9 +1,61 @@
 [{
     "id": 1,
-    "question": "yolo",
-    "answers": ["Hello", "Hi"]
+    "question": "What is the favorite movie series at practo?",
+    "answers": ["star wars"]
 }, {
     "id": 2,
-    "question": "yolo",
-    "answers": ["Hello", "Hi"]
+    "question": "Who’s the guy behind 'Look Behind’ in the elevators?",
+    "answers": ["Debarko", "?"]
+},{
+    "id": 3,
+    "question": "Dentist by education, marketing guy in Practo by profession",
+    "answers": ["ashish", "ashish pingle", "pingle"]
+}, {
+    "id": 4,
+    "question": "What's Practo's annual event called?",
+    "answers": ["scene", "practo scene"]
+},{
+    "id": 5,
+    "question": "Total number of commits to fabric codebase till date?",
+    "answers": ["33164"]
+}, {
+    "id": 6,
+    "question": "The team which cracked last sandbox",
+    "answers": ["King lights"]
+},{
+    "id": 7,
+    "question": "What’s the most popular production mysql user?",
+    "answers": ["skywalker"]
+}, {
+    "id": 8,
+    "question": "Who is 'Ray ki maa'?",
+    "answers": ["Annesha"]
+},{
+    "id": 9,
+    "question": "Who has snow white stuck on his Mac?",
+    "answers": ["Alagu"]
+}, {
+    "id": 10,
+    "question": "Most popular item ordered on the Pharma app?",
+    "answers": ["Strepsils"]
+},{
+    "id": 11,
+    "question": "Who’s the fat guy connecting doctors?",
+    "answers": ["varun", "varun vohra", "vohra", "nazgul"]
+}, {
+    "id": 12,
+    "question": "Days passed since fabric's last downtime",
+    "answers": ["?"]
+},{
+    "id": 13,
+    "question": "The search which makes practo search so fast",
+    "answers": ["elastic", "elastic search", "lucent"]
+}, {
+    "id": 14,
+    "question": "Who is the employee #6?",
+    "answers": ["praveen", "psakri", "praveen sakri"]
+},{
+    "id": 15,
+    "question": "Where are our production servers physically located?",
+    "answers": ["singapore"]
 }]
