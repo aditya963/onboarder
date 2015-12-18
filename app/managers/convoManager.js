@@ -1,12 +1,13 @@
 import controller from '../slack.js';
 import User from '../schema/User.js';
 import fs from 'fs';
-
+const MAX_QUESTIONS = 10;
 async function ask(bot, convo, question) {
     return new Promise(function (resolve, reject) {
-        let regexedAnswer = '^('+question.answers.join('|')+')';
+        let regexedAnswer = '^(' + question.answers.join('|') + ')';
+
         convo.ask(question.question, [{
-            pattern: new RegExp(regexedAnswer,'i'),
+            pattern: new RegExp(regexedAnswer, 'i'),
             callback: async function (response, convo) {
                 let user;
                 try {
@@ -21,13 +22,13 @@ async function ask(bot, convo, question) {
                 } catch (e) {
                     console.log('failed to fetch', e);
                     convo.say('something broke at our end :(!');
-                        reject(e);
-                        return;
+                    reject(e);
+                    return;
                 }
                 var reqdData = {
                     "message_type": "answer",
                     "correct": 1,
-                    "question": question.question,
+                    "question": question.id,
                     "message": response.text,
                     "ts": response.ts,
                 }
@@ -72,7 +73,7 @@ async function ask(bot, convo, question) {
                         console.log('inside default');
                         convo.say("try again");
                     });
-            
+
                 });
                 convo.repeat();
                 convo.next();
@@ -83,16 +84,42 @@ async function ask(bot, convo, question) {
 export default {
     start(bot, message) {
         bot.startConversation(message, async function (err, convo) {
-            
-            console.log(__dirname + '/../../questions.json');
             let questionsText = fs.readFileSync(__dirname + '/../../questions.json');
             let questions = JSON.parse(questionsText);
-            for (let question of questions) {
+            let unAnsweredQuestions = questions;
+            try {
+                let user = await User.findOne({
+                    id: message.user
+                }).exec();
+                if (user) {
+                    let answeredQuestions = user.answers.filter((answer) => answer.correct);
+                    if (answeredQuestions.length >= MAX_QUESTIONS) {
+                        convo.say('Thanks for completing the Treasure hunt1!');
+                        return;
+                    }
+                    unAnsweredQuestions = questions.filter((question) => {
+                        answeredQuestions.find(q => q.question !== question.id)
+                    });
+                    unAnsweredQuestions = unAnsweredQuestions.splice(-(unAnsweredQuestions.length - 1),
+                        unAnsweredQuestions.length - MAX_QUESTIONS
+                    );
+                    if (!unAnsweredQuestions.length) {
+                        convo.say('Thanks for completing the Treasure hunt2!');
+                        return;
+                    }
+                    console.log(unAnsweredQuestions);
+                }
+            } catch (e) {
+                convo.say('something broke at our end :(!');
+                console.error(e);
+                return;
+            }
+            for (let question of unAnsweredQuestions) {
                 try {
-                    console.log(question.answers.map(answer => new RegExp(answer,'i')));
+                    console.log(question.answers.map(answer => new RegExp(answer, 'i')));
                     await ask(bot, convo, question);
                 } catch (e) {
-
+                    console.error(e);
                 }
             }
         })
