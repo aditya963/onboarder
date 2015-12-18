@@ -1,14 +1,6 @@
-import slack from './slack.js';
+import controller from './slack.js';
 
-slack.on('open', () => {
-    console.log('yo im open!');
+// give the bot something to listen for.
+controller.hears('hello', 'direct_message,direct_mention,mention', function (bot, message) {
+    bot.reply(message, 'Hello yourself.');
 });
-
-slack.on('message', (message) => {
-    console.log('got a message!', message);
-});
-slack.on('error', (error) => {
-    console.log('oops!!', error);
-});
-
-slack.login();

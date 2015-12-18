@@ -1,4 +1,13 @@
 require('dotenv').load();
-import Slack from 'slack-client';
+import Botkit from 'botkit';
 
-export default new Slack(process.env.SLACK_API_TOKEN, true, true);
+let controller = Botkit.slackbot({
+    debug: false
+});
+
+// connect the bot to a stream of messages
+controller.spawn({
+    token: process.env.SLACK_API_TOKEN,
+}).startRTM()
+
+export default controller;
